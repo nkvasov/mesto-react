@@ -1,125 +1,130 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm/PopupWithForm';
+import ImagePopup from './ImagePopup/ImagePopup.js';
+import { api } from '../utils/Api.js';
+import Card from './Card/Card.js';
 
-export default class Main extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+const Main = (props) => {
+  const [userName, setUserName] = React.useState('Инкогнито');
+  const [userDescription, setUserDescription] = React.useState('волшебник');
+  const [userAvatar, setUserAvatar] = React.useState('../images/profile_kusto.jpg');
+  const [cards, setCards] = React.useState([]);
 
-  render() {
-    return (
-      <main className="content">
+  React.useEffect(() => {
+    api.getUserInfo()
+      .then((userData) => {
+        setUserName(userData.name);
+        setUserDescription(userData.about);
+        setUserAvatar(userData.avatar);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
-        <section className="profile">
-          <div className="profile__content">
-            <img src="./images/profile_kusto.jpg" className="profile__avatar" alt="фото Жак-Ив Кусто" onClick={this.props.onEditAvatar} />
-            <div className="profile__info">
+  React.useEffect(() => {
+    api.getInitialCards()
+      .then((initialCards) => {
+        setCards(initialCards);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
-              <div className="profile__title-block">
-                <h1 className="profile__name">Жак-Ив Кусто</h1>
-                <button className="profile__edit-btn" type="button" onClick={this.props.onEditProfile} aria-label="Редактировать профиль"></button>
-              </div>
-              <p className="profile__description">Исследователь океана</p>
+  }, []);
 
+  return (
+    <main className="content">
+
+      <section className="profile">
+        <div className="profile__content">
+          <img src={userAvatar} className="profile__avatar" alt={`фото ${userName}`} onClick={props.onEditAvatar} />
+          <div className="profile__info">
+
+            <div className="profile__title-block">
+              <h1 className="profile__name">{userName}</h1>
+              <button className="profile__edit-btn" type="button" onClick={props.onEditProfile} aria-label="Редактировать профиль"></button>
             </div>
+            <p className="profile__description">{userDescription}</p>
 
           </div>
-          <button className="add-btn" type="button" onClick={this.props.onAddPlace} aria-label="Добавить место"></button>
 
-        </section>
+        </div>
+        <button className="add-btn" type="button" onClick={props.onAddPlace} aria-label="Добавить место"></button>
 
-        <section className="cards">
-          <ul className="cards__container"></ul>
-        </section>
+      </section>
 
-        <section className="popup popup_content_form confirmation-popup">
-          <form className="form popup__container" name="card-delete-confirmation" novalidate>
-            <h3 className="form__title">Вы уверены?</h3>
-            <button className="close-btn form__close-btn" type="reset" name="close" aria-label="Закрыть попап"></button>
-            <button className="form__submit-btn" type="submit">Да</button>
-          </form>
-        </section>
+      <section className="cards">
+        <ul className="cards__container">
+          {cards.map((card) => (
+            <Card card={card} onCardClick={props.onCardClick} />
+          ))}
+        </ul>
+      </section>
 
-        <PopupWithForm
-          name='update-avatar'
-          title='Обновить аватар'
-          isOpen={this.props.isEditAvatarPopupOpen}
-          submitBtnText='Сохранить'>
-          <div className="form__field">
-            <input className="form__input" id="avatar-link" type="url" name="avatar-link" placeholder="Ссылка на картинку" required />
-            <span className="form__input-error form__input-error_origin_avatar-link">ошибка</span>
-          </div>
-        </PopupWithForm>
+      <PopupWithForm
+        name='confirmation'
+        title='Вы уверены?'
+        // isOpen={props.isEditAvatarPopupOpen}
+        onClose={props.onClosePopups}
+        submitBtnText='Да' />
 
-        {/* <section className="popup popup_content_form update-avatar-popup">
-          <form className="form popup__container form-to-validate" name="update-avatar" novalidate>
-            <h3 className="form__title">Обновить аватар</h3>
-            <button className="close-btn form__close-btn" type="reset" name="close" aria-label="Закрыть попап"></button>
-            <div className="form__field">
-              <input className="form__input" id="avatar-link" type="url" name="avatar-link" placeholder="Ссылка на картинку" required />
-              <span className="form__input-error form__input-error_origin_avatar-link">ошибка</span>
-            </div>
-            <button className="form__submit-btn" type="submit">Сохранить</button>
-          </form>
-        </section> */}
+      <PopupWithForm
+        name='update-avatar'
+        title='Обновить аватар'
+        isOpen={props.isEditAvatarPopupOpen}
+        onClose={props.onClosePopups}
+        submitBtnText='Сохранить'>
+        <div className="form__field">
+          <input className="form__input" id="avatar-link" type="url" name="avatar-link" placeholder="Ссылка на картинку" required />
+          <span className="form__input-error form__input-error_origin_avatar-link">ошибка</span>
+        </div>
+      </PopupWithForm>
 
-        <PopupWithForm
-          name='edit-profile'
-          title='Редактировать профиль'
-          isOpen={this.props.isEditProfilePopupOpen}
-          submitBtnText='Сохранить'>
-          <div className="form__field">
-            <input className="form__input" id="profile-name" type="text" name="profile-name" placeholder="Имя" required minlength="2" maxlength="40" />
-            <span className="form__input-error form__input-error_origin_profile-name">ошибка</span>
-          </div>
-          <div className="form__field">
-            <input className="form__input" id="profile-description" type="text" name="profile-description" placeholder="Описание" required minlength="2" maxlength="200" />
-            <span className="form__input-error form__input-error_origin_profile-description"></span>
-          </div>
-        </PopupWithForm>
+      <PopupWithForm
+        name='edit-profile'
+        title='Редактировать профиль'
+        isOpen={props.isEditProfilePopupOpen}
+        onClose={props.onClosePopups}
+        submitBtnText='Сохранить'>
+        <div className="form__field">
+          <input className="form__input" id="profile-name" type="text" name="profile-name" placeholder="Имя" required minLength="2" maxLength="40" />
+          <span className="form__input-error form__input-error_origin_profile-name">ошибка</span>
+        </div>
+        <div className="form__field">
+          <input className="form__input" id="profile-description" type="text" name="profile-description" placeholder="Описание" required minLength="2" maxLength="200" />
+          <span className="form__input-error form__input-error_origin_profile-description"></span>
+        </div>
+      </PopupWithForm>
+
+      <ImagePopup
+      card={props.selectedCard}
+      onClose={props.onClosePopups} />
+      
 
 
-        <section className="popup popup_content_figure image-popup">
-          <figure className="figure popup__container">
-            <button className="close-btn figure__close-btn" type="button" aria-label="Закрыть попап"></button>
-            <img className="figure__image" src="#" alt="описание" />
-            <figcaption className="figure__caption">Подпись</figcaption>
-          </figure>
-        </section>
 
-        <PopupWithForm
+      <PopupWithForm
         name='add-card'
         title='Новое место'
-        isOpen={this.props.isAddPlacePopupOpen}
+        isOpen={props.isAddPlacePopupOpen}
+        onClose={props.onClosePopups}
         submitBtnText='Создать'>
-          <div className="form__field">
-            <input className="form__input" id="card-name" type="text" name="card-name" placeholder="Название" required minlength="1" maxlength="30" />
-            <span className="form__input-error form__input-error_origin_card-name"></span>
-          </div>
-          <div className="form__field">
-            <input className="form__input" id="card-link" type="url" name="card-link" placeholder="Ссылка на картинку" required />
-            <span className="form__input-error form__input-error_origin_card-link"></span>
-          </div>
-        </PopupWithForm>
+        <div className="form__field">
+          <input className="form__input" id="card-name" type="text" name="card-name" placeholder="Название" required minLength="1" maxLength="30" />
+          <span className="form__input-error form__input-error_origin_card-name"></span>
+        </div>
+        <div className="form__field">
+          <input className="form__input" id="card-link" type="url" name="card-link" placeholder="Ссылка на картинку" required />
+          <span className="form__input-error form__input-error_origin_card-link"></span>
+        </div>
+      </PopupWithForm>
 
-        {/* <section className="popup popup_content_form card-popup">
-          <form className="form popup__container form-to-validate" name="add-card" novalidate>
-            <h3 className="form__title">Новое место</h3>
-            <button className="close-btn form__close-btn" type="reset" aria-label="Закрыть попап"></button>
-            <div className="form__field">
-              <input className="form__input" id="card-name" type="text" name="card-name" placeholder="Название" required minlength="1" maxlength="30" />
-              <span className="form__input-error form__input-error_origin_card-name"></span>
-            </div>
-            <div className="form__field">
-              <input className="form__input" id="card-link" type="url" name="card-link" placeholder="Ссылка на картинку" required />
-              <span className="form__input-error form__input-error_origin_card-link"></span>
-            </div>
-            <button className="form__submit-btn" type="submit">Создать</button>
-          </form>
-        </section> */}
 
-      </main>
+    </main>
 
-    );
-  }
+  );
 }
+
+export default Main;
+

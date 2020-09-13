@@ -10,7 +10,9 @@ function App(props) {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  
+  const [selectedCard, setSelectedCard] = React.useState();
+
+
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
   }
@@ -23,6 +25,18 @@ function App(props) {
     setIsAddPlacePopupOpen(true);
   }
 
+  const closeAllPopups = () => {
+    isEditProfilePopupOpen && setIsEditProfilePopupOpen(false);
+    isEditAvatarPopupOpen && setIsEditAvatarPopupOpen(false);
+    isAddPlacePopupOpen && setIsAddPlacePopupOpen(false);
+    setSelectedCard();
+  }
+
+  const handleCardClick = (card) => {
+    setSelectedCard(card);
+    console.log(selectedCard);
+  }
+
   return (
     <div className="page">
       <div className="page__container">
@@ -31,26 +45,16 @@ function App(props) {
         onEditProfile={handleEditProfileClick}
         onAddPlace={handleAddPlaceClick}
         onEditAvatar={handleEditAvatarClick}
+        onClosePopups={closeAllPopups}
+        onCardClick={handleCardClick}
         isEditProfilePopupOpen={isEditProfilePopupOpen}
         isEditAvatarPopupOpen={isEditAvatarPopupOpen}
         isAddPlacePopupOpen={isAddPlacePopupOpen}
+        selectedCard={selectedCard}
         />
         <Footer />
       </div>
-      
-      <template className="card-template">
-        <li className="card">
-          <button className="card__trash-btn" aria-label="Удалить картинку с подписью" type="button" name="trash"></button>
-          <img className="card__image" src="#" alt="описание" />
-          <div className="card__caption">
-            <h2 className="card__title"></h2>
-            <div className="card__like-block">
-              <button className="card__like-btn" type="button" name="like" aria-label="Поставить лайк картинке"></button>
-              <p className="card__like-numbers">777777</p>
-            </div>
-          </div>
-        </li>
-    </template>
+    
     </div>
   );
 }
