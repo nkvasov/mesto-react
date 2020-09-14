@@ -1,8 +1,8 @@
 import React from 'react';
-import PopupWithForm from './PopupWithForm/PopupWithForm';
-import ImagePopup from './ImagePopup/ImagePopup.js';
-import { api } from '../utils/Api.js';
-import Card from './Card/Card.js';
+import PopupWithForm from '../PopupWithForm/PopupWithForm';
+import ImagePopup from '../ImagePopup/ImagePopup.js';
+import { api } from '../../utils/Api.js';
+import Card from '../Card/Card.js';
 
 const Main = (props) => {
   const [userName, setUserName] = React.useState('Инкогнито');
@@ -57,7 +57,7 @@ const Main = (props) => {
       <section className="cards">
         <ul className="cards__container">
           {cards.map((card) => (
-            <Card card={card} onCardClick={props.onCardClick} />
+            <Card card={card} onCardClick={props.onCardClick} key={card._id} />
           ))}
         </ul>
       </section>
@@ -65,7 +65,7 @@ const Main = (props) => {
       <PopupWithForm
         name='confirmation'
         title='Вы уверены?'
-        // isOpen={props.isEditAvatarPopupOpen}
+        // isOpen={props.isConfirmationPopupOpen}
         onClose={props.onClosePopups}
         submitBtnText='Да' />
 
@@ -101,9 +101,6 @@ const Main = (props) => {
       card={props.selectedCard}
       onClose={props.onClosePopups} />
       
-
-
-
       <PopupWithForm
         name='add-card'
         title='Новое место'

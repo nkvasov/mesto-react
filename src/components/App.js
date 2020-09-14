@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.css';
 
-import Header from './Header';
-import Footer from './Footer';
-import Main from './Main';
+import Header from './Header/Header';
+import Footer from './Footer/Footer';
+import Main from './Main/Main';
 
 function App(props) {
 
@@ -34,7 +34,6 @@ function App(props) {
 
   const handleCardClick = (card) => {
     setSelectedCard(card);
-    console.log(selectedCard);
   }
 
   return (
