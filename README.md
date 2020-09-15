@@ -7,8 +7,10 @@
 Реализовано взаимодействие с сервером.
 В данный момент проект переносится на React.
 
-[Ссылка на версию проекта без React на GitHub Pages](https://nkvasov.github.io/mesto/)
-[Ссылка на текущую версию проекта на React не работает. Проект собрался в build, но не запускается](https://nkvasov.github.io/mesto-react/index.html)
+## Ссылка на версию проекта без React:
+[mesto](https://nkvasov.github.io/mesto/)
+## Ссылка на текущую версию проекта на React:
+[Ссылка не работает. Проект собрался в build, но не запускается](https://nkvasov.github.io/mesto-react/index.html)
 
 ## Технологии
 Используется html, css (включая grid и flexbox), javascript.
