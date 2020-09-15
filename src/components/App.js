@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
@@ -10,6 +9,7 @@ function App(props) {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+  const [isImagePopupOpen, setImagePopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState();
 
 
@@ -29,10 +29,12 @@ function App(props) {
     isEditProfilePopupOpen && setIsEditProfilePopupOpen(false);
     isEditAvatarPopupOpen && setIsEditAvatarPopupOpen(false);
     isAddPlacePopupOpen && setIsAddPlacePopupOpen(false);
-    setSelectedCard();
+    isImagePopupOpen && setImagePopupOpen(false);
+    setTimeout(setSelectedCard, 500);
   }
 
   const handleCardClick = (card) => {
+    setImagePopupOpen(true);
     setSelectedCard(card);
   }
 
@@ -49,8 +51,8 @@ function App(props) {
         isEditProfilePopupOpen={isEditProfilePopupOpen}
         isEditAvatarPopupOpen={isEditAvatarPopupOpen}
         isAddPlacePopupOpen={isAddPlacePopupOpen}
-        selectedCard={selectedCard}
-        />
+        isImagePopupOpen={isImagePopupOpen}
+        selectedCard={selectedCard} />
         <Footer />
       </div>
     

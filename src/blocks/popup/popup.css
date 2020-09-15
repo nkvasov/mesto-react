@@ -13,7 +13,8 @@
   color: #000000;
   visibility: hidden;
   opacity: 0;
-  transition: 0.5s ease;
+  /* transition: 0.5s ease; */
+  transition: visibility 0s ease 0.5s, opacity 0.5s ease;
 
   font-family: 'Inter', Arial, Helvetica, sans-serif;
   -moz-osx-font-smoothing: grayscale;
