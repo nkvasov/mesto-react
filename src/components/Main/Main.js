@@ -9,12 +9,15 @@ const Main = (props) => {
   const [userDescription, setUserDescription] = React.useState('Инкогнитов');
   const [userAvatar, setUserAvatar] = React.useState('../images/profile_kusto.jpg');
   const [cards, setCards] = React.useState([]);
+  const [userId, setUserId] = React.useState(null);
 
   React.useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
       .then(([userData, initialCards]) => {
+        // console.log(initialCards);
         setUserName(userData.name);
         setUserDescription(userData.about);
+        setUserId(userData._id)
         setUserAvatar(userData.avatar);
         setCards(initialCards);
       })
@@ -59,7 +62,9 @@ const Main = (props) => {
             <Card
               card={card}
               onCardClick={props.onCardClick}
-              key={card._id} />
+              key={card._id}
+              wasLiked={card.likes.some(user => user._id === userId)}
+              isOwner={card.owner._id === userId} />
           ))}
         </ul>
       </section>
@@ -119,7 +124,7 @@ const Main = (props) => {
       <ImagePopup
         card={props.selectedCard}
         onClose={props.onClosePopups}
-        isOpen={props.isImagePopupOpen}/>
+        isOpen={props.isImagePopupOpen} />
 
       <PopupWithForm
         name='add-card'

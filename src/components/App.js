@@ -12,6 +12,9 @@ function App(props) {
   const [isImagePopupOpen, setImagePopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState();
 
+  // const handleLogIn = (id) => {
+  //   setUserId(id);
+  // }
 
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
@@ -43,19 +46,22 @@ function App(props) {
       <div className="page__container">
         <Header />
         <Main
-        onEditProfile={handleEditProfileClick}
-        onAddPlace={handleAddPlaceClick}
-        onEditAvatar={handleEditAvatarClick}
-        onClosePopups={closeAllPopups}
-        onCardClick={handleCardClick}
-        isEditProfilePopupOpen={isEditProfilePopupOpen}
-        isEditAvatarPopupOpen={isEditAvatarPopupOpen}
-        isAddPlacePopupOpen={isAddPlacePopupOpen}
-        isImagePopupOpen={isImagePopupOpen}
-        selectedCard={selectedCard} />
+          onEditProfile={handleEditProfileClick}
+          onAddPlace={handleAddPlaceClick}
+          onEditAvatar={handleEditAvatarClick}
+          onClosePopups={closeAllPopups}
+          onCardClick={handleCardClick}
+          // onLoadPage={handleLogIn}
+          isEditProfilePopupOpen={isEditProfilePopupOpen}
+          isEditAvatarPopupOpen={isEditAvatarPopupOpen}
+          isAddPlacePopupOpen={isAddPlacePopupOpen}
+          isImagePopupOpen={isImagePopupOpen}
+          selectedCard={selectedCard}
+          // userId={userId}
+        />
         <Footer />
       </div>
-    
+
     </div>
   );
 }
