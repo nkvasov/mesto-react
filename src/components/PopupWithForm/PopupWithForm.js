@@ -6,12 +6,13 @@ const PopupWithForm = (props) => {
     title,
     onClose,
     submitBtnText,
+    onSubmit,
     children } = props;
   const className = `popup popup_content_form ${name}-popup ${isOpen && 'popup_opened'}`;
 
   return (
     <section className={className}>
-      <form className="form popup__container" name={name} noValidate>
+      <form className="form popup__container" name={name} onSubmit={onSubmit} noValidate>
         <h3 className="form__title"> {title} </h3>
         <button
           className="close-btn form__close-btn"

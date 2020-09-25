@@ -1,7 +1,7 @@
 import React, {useContext, useState} from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
-const Card = ({card, onCardClick, wasLiked}) => {
+const Card = ({card, onCardClick, onCardLike, onCardDelete}) => {
   const currentUser = useContext(CurrentUserContext);
   const isOwn = card.owner._id === currentUser._id;
   const isLiked = card.likes.some(user => user._id === currentUser._id);
@@ -11,9 +11,10 @@ const Card = ({card, onCardClick, wasLiked}) => {
     onCardClick(card);
   }
   const handleLikeClick = () => {
-    // console.log('Like');
-    // console.log(isLiked);
-    // isLiked ? setIsLiked(false) : setIsLiked(true);
+    onCardLike(card);
+  }
+  const handleTrashClick = () => {
+    onCardDelete(card);
   }
 
   const likeClassName = `card__like-btn ${isLiked && 'card__like-btn_enabled'}`;
@@ -27,7 +28,8 @@ const Card = ({card, onCardClick, wasLiked}) => {
         className={TrashClassName}
         aria-label="Удалить картинку с подписью"
         type="button"
-        name="trash" />
+        name="trash"
+        onClick={handleTrashClick} />
       <img
         className="card__image"
         src={card.link}

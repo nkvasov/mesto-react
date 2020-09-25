@@ -4,16 +4,34 @@ import ImagePopup from '../ImagePopup/ImagePopup.js';
 import { api } from '../../utils/Api.js';
 import Card from '../Card/Card.js';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import EditProfilePopup from '../EditProfilePopup/EditProfilePopup';
 
 const Main = (props) => {
-  const user = useContext(CurrentUserContext);
+  const currentUser = useContext(CurrentUserContext);
   const [cards, setCards] = useState([]);
-  // const [userId, setUserId] = React.useState(null);
+
+  function handleCardLike(card) {
+    const isLiked = card.likes.some(user => user._id === currentUser._id);
+    api.changeLikeCardStatus(card._id, isLiked)
+    .then((newCard) => {
+      const newCards = cards.map((c) => c._id === card._id ? newCard : c);
+      setCards(newCards);
+    });
+  }
+
+  function handleCardDelete(card) {
+    api.deleteCard(card._id)
+    .then(() => {
+      const deletedCardIndex = cards.findIndex((c) => c._id === card._id);
+      const newCards = cards.slice();
+      newCards.splice(deletedCardIndex, 1);
+      setCards(newCards);
+    })
+  }
 
   useEffect(() => {
     api.getInitialCards()
       .then((initialCards) => {
-        // console.log(initialCards);
         setCards(initialCards);
       })
       .catch((err) => {
@@ -28,20 +46,20 @@ const Main = (props) => {
       <section className="profile">
         <div className="profile__content">
           <img
-            src={user.avatar}
+            src={currentUser.avatar}
             className="profile__avatar"
-            alt={`фото ${user.name}`}
+            alt={`фото ${currentUser.name}`}
             onClick={props.onEditAvatar} />
           <div className="profile__info">
             <div className="profile__title-block">
-              <h1 className="profile__name">{user.name}</h1>
+              <h1 className="profile__name">{currentUser.name}</h1>
               <button
                 className="profile__edit-btn"
                 type="button"
                 onClick={props.onEditProfile}
                 aria-label="Редактировать профиль" />
             </div>
-            <p className="profile__description">{user.about}</p>
+            <p className="profile__description">{currentUser.about}</p>
           </div>
         </div>
         <button
@@ -57,7 +75,9 @@ const Main = (props) => {
             <Card
               card={card}
               onCardClick={props.onCardClick}
-              key={card._id} />
+              key={card._id}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete} />
           ))}
         </ul>
       </section>
@@ -65,14 +85,14 @@ const Main = (props) => {
       <PopupWithForm
         name='confirmation'
         title='Вы уверены?'
-        onClose={props.onClosePopups}
+        onClose={props.closeAllPopups}
         submitBtnText='Да' />
 
       <PopupWithForm
         name='update-avatar'
         title='Обновить аватар'
         isOpen={props.isEditAvatarPopupOpen}
-        onClose={props.onClosePopups}
+        onClose={props.closeAllPopups}
         submitBtnText='Сохранить'>
         <div className="form__field">
           <input
@@ -86,44 +106,21 @@ const Main = (props) => {
         </div>
       </PopupWithForm>
 
-      <PopupWithForm
-        name='edit-profile'
-        title='Редактировать профиль'
-        isOpen={props.isEditProfilePopupOpen}
-        onClose={props.onClosePopups}
-        submitBtnText='Сохранить'>
-        <div className="form__field">
-          <input className="form__input"
-            id="profile-name"
-            type="text"
-            name="profile-name"
-            placeholder="Имя"
-            required minLength="2"
-            maxLength="40" />
-          <span className="form__input-error form__input-error_origin_profile-name" />
-        </div>
-        <div className="form__field">
-          <input className="form__input"
-            id="profile-description"
-            type="text"
-            name="profile-description"
-            placeholder="Описание"
-            required minLength="2"
-            maxLength="200" />
-          <span className="form__input-error form__input-error_origin_profile-description" />
-        </div>
-      </PopupWithForm>
+      <EditProfilePopup
+      isOpen={props.isEditProfilePopupOpen}
+      onClose={props.closeAllPopups}
+      onUpdateUser={props.onUpdateUser} /> 
 
       <ImagePopup
         card={props.selectedCard}
-        onClose={props.onClosePopups}
+        onClose={props.closeAllPopups}
         isOpen={props.isImagePopupOpen} />
 
       <PopupWithForm
         name='add-card'
         title='Новое место'
         isOpen={props.isAddPlacePopupOpen}
-        onClose={props.onClosePopups}
+        onClose={props.closeAllPopups}
         submitBtnText='Создать'>
         <div className="form__field">
           <input
