@@ -1,20 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import Main from './Main/Main';
+import { api } from '../utils/Api';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function App(props) {
 
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [isImagePopupOpen, setImagePopupOpen] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState();
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isImagePopupOpen, setImagePopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState();
+  const [currentUser, setCurrentUser] = useState({});
 
-  // const handleLogIn = (id) => {
-  //   setUserId(id);
-  // }
+  useEffect(() => {
+    api.getUserInfo()
+      .then((userData) => {
+        console.log(userData);
+        setCurrentUser(userData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
@@ -42,27 +52,26 @@ function App(props) {
   }
 
   return (
-    <div className="page">
-      <div className="page__container">
-        <Header />
-        <Main
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onEditAvatar={handleEditAvatarClick}
-          onClosePopups={closeAllPopups}
-          onCardClick={handleCardClick}
-          // onLoadPage={handleLogIn}
-          isEditProfilePopupOpen={isEditProfilePopupOpen}
-          isEditAvatarPopupOpen={isEditAvatarPopupOpen}
-          isAddPlacePopupOpen={isAddPlacePopupOpen}
-          isImagePopupOpen={isImagePopupOpen}
-          selectedCard={selectedCard}
-          // userId={userId}
-        />
-        <Footer />
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className="page">
+        <div className="page__container">
+          <Header />
+          <Main
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
+            onEditAvatar={handleEditAvatarClick}
+            onClosePopups={closeAllPopups}
+            onCardClick={handleCardClick}
+            isEditProfilePopupOpen={isEditProfilePopupOpen}
+            isEditAvatarPopupOpen={isEditAvatarPopupOpen}
+            isAddPlacePopupOpen={isAddPlacePopupOpen}
+            isImagePopupOpen={isImagePopupOpen}
+            selectedCard={selectedCard}
+          />
+          <Footer />
+        </div>
       </div>
-
-    </div>
+    </CurrentUserContext.Provider>
   );
 }
 

@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
-const Card = ({card, onCardClick, wasLiked, isOwner}) => {
-
-  const [isLiked, setIsLiked] = React.useState(wasLiked);
+const Card = ({card, onCardClick, wasLiked}) => {
+  const currentUser = useContext(CurrentUserContext);
+  const isOwn = card.owner._id === currentUser._id;
+  const isLiked = card.likes.some(user => user._id === currentUser._id);
+  // const [isLiked, setIsLiked] = useState(wasLiked);
 
   const handleImageClick = () => {
     onCardClick(card);
@@ -10,12 +13,12 @@ const Card = ({card, onCardClick, wasLiked, isOwner}) => {
   const handleLikeClick = () => {
     // console.log('Like');
     // console.log(isLiked);
-    isLiked ? setIsLiked(false) : setIsLiked(true);
+    // isLiked ? setIsLiked(false) : setIsLiked(true);
   }
 
   const likeClassName = `card__like-btn ${isLiked && 'card__like-btn_enabled'}`;
 
-  const TrashClassName = `card__trash-btn ${isOwner && 'card__trash-btn_enabled'}`;
+  const TrashClassName = `card__trash-btn ${isOwn && 'card__trash-btn_enabled'}`;
 
 
   return (

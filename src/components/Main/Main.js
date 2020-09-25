@@ -1,24 +1,19 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import PopupWithForm from '../PopupWithForm/PopupWithForm';
 import ImagePopup from '../ImagePopup/ImagePopup.js';
 import { api } from '../../utils/Api.js';
 import Card from '../Card/Card.js';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 const Main = (props) => {
-  const [userName, setUserName] = React.useState('Инкогнито');
-  const [userDescription, setUserDescription] = React.useState('Инкогнитов');
-  const [userAvatar, setUserAvatar] = React.useState('../images/profile_kusto.jpg');
-  const [cards, setCards] = React.useState([]);
-  const [userId, setUserId] = React.useState(null);
+  const user = useContext(CurrentUserContext);
+  const [cards, setCards] = useState([]);
+  // const [userId, setUserId] = React.useState(null);
 
-  React.useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getInitialCards()])
-      .then(([userData, initialCards]) => {
+  useEffect(() => {
+    api.getInitialCards()
+      .then((initialCards) => {
         // console.log(initialCards);
-        setUserName(userData.name);
-        setUserDescription(userData.about);
-        setUserId(userData._id)
-        setUserAvatar(userData.avatar);
         setCards(initialCards);
       })
       .catch((err) => {
@@ -33,20 +28,20 @@ const Main = (props) => {
       <section className="profile">
         <div className="profile__content">
           <img
-            src={userAvatar}
+            src={user.avatar}
             className="profile__avatar"
-            alt={`фото ${userName}`}
+            alt={`фото ${user.name}`}
             onClick={props.onEditAvatar} />
           <div className="profile__info">
             <div className="profile__title-block">
-              <h1 className="profile__name">{userName}</h1>
+              <h1 className="profile__name">{user.name}</h1>
               <button
                 className="profile__edit-btn"
                 type="button"
                 onClick={props.onEditProfile}
                 aria-label="Редактировать профиль" />
             </div>
-            <p className="profile__description">{userDescription}</p>
+            <p className="profile__description">{user.about}</p>
           </div>
         </div>
         <button
@@ -62,9 +57,7 @@ const Main = (props) => {
             <Card
               card={card}
               onCardClick={props.onCardClick}
-              key={card._id}
-              wasLiked={card.likes.some(user => user._id === userId)}
-              isOwner={card.owner._id === userId} />
+              key={card._id} />
           ))}
         </ul>
       </section>
