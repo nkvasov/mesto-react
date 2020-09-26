@@ -18,7 +18,7 @@ function App(props) {
   useEffect(() => {
     api.getUserInfo()
       .then((userData) => {
-        // console.log(userData);
+        console.log(userData);
         setCurrentUser(userData);
       })
       .catch((err) => {
@@ -40,6 +40,19 @@ function App(props) {
 
   const handleUpdateUser = (userData) => {
     api.setUserInfo(userData)
+      .then((res) => {
+        setCurrentUser(res);
+      })
+      .then(() => {
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleUpdateAvatar = (userData) => {
+    api.setAvatar(userData)
     .then((res) => {
       setCurrentUser(res);
     })
@@ -76,6 +89,7 @@ function App(props) {
             closeAllPopups={closeAllPopups}
             onCardClick={handleCardClick}
             onUpdateUser={handleUpdateUser}
+            onUpdateAvatar={handleUpdateAvatar}
             isEditProfilePopupOpen={isEditProfilePopupOpen}
             isEditAvatarPopupOpen={isEditAvatarPopupOpen}
             isAddPlacePopupOpen={isAddPlacePopupOpen}

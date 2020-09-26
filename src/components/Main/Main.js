@@ -5,6 +5,7 @@ import { api } from '../../utils/Api.js';
 import Card from '../Card/Card.js';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import EditProfilePopup from '../EditProfilePopup/EditProfilePopup';
+import EditAvatarPopup from '../EditAvatarPopup/EditAvatarPopup';
 
 const Main = (props) => {
   const currentUser = useContext(CurrentUserContext);
@@ -13,20 +14,20 @@ const Main = (props) => {
   function handleCardLike(card) {
     const isLiked = card.likes.some(user => user._id === currentUser._id);
     api.changeLikeCardStatus(card._id, isLiked)
-    .then((newCard) => {
-      const newCards = cards.map((c) => c._id === card._id ? newCard : c);
-      setCards(newCards);
-    });
+      .then((newCard) => {
+        const newCards = cards.map((c) => c._id === card._id ? newCard : c);
+        setCards(newCards);
+      });
   }
 
   function handleCardDelete(card) {
     api.deleteCard(card._id)
-    .then(() => {
-      const deletedCardIndex = cards.findIndex((c) => c._id === card._id);
-      const newCards = cards.slice();
-      newCards.splice(deletedCardIndex, 1);
-      setCards(newCards);
-    })
+      .then(() => {
+        const deletedCardIndex = cards.findIndex((c) => c._id === card._id);
+        const newCards = cards.slice();
+        newCards.splice(deletedCardIndex, 1);
+        setCards(newCards);
+      })
   }
 
   useEffect(() => {
@@ -88,28 +89,16 @@ const Main = (props) => {
         onClose={props.closeAllPopups}
         submitBtnText='Да' />
 
-      <PopupWithForm
-        name='update-avatar'
-        title='Обновить аватар'
+
+      <EditAvatarPopup
         isOpen={props.isEditAvatarPopupOpen}
         onClose={props.closeAllPopups}
-        submitBtnText='Сохранить'>
-        <div className="form__field">
-          <input
-            className="form__input"
-            id="avatar-link"
-            type="url"
-            name="avatar-link"
-            placeholder="Ссылка на картинку"
-            required />
-          <span className="form__input-error form__input-error_origin_avatar-link" />
-        </div>
-      </PopupWithForm>
+        onUpdateAvatar={props.onUpdateAvatar} />
 
       <EditProfilePopup
-      isOpen={props.isEditProfilePopupOpen}
-      onClose={props.closeAllPopups}
-      onUpdateUser={props.onUpdateUser} /> 
+        isOpen={props.isEditProfilePopupOpen}
+        onClose={props.closeAllPopups}
+        onUpdateUser={props.onUpdateUser} />
 
       <ImagePopup
         card={props.selectedCard}
