@@ -1,7 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import PopupWithForm from '../PopupWithForm/PopupWithForm';
 import ImagePopup from '../ImagePopup/ImagePopup.js';
-// import { api } from '../../utils/Api.js';
 import Card from '../Card/Card.js';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import EditProfilePopup from '../EditProfilePopup/EditProfilePopup';
@@ -9,6 +8,24 @@ import EditAvatarPopup from '../EditAvatarPopup/EditAvatarPopup';
 import AddPlacePopup from '../AddPlacePopup/AddPlacePopup';
 
 const Main = (props) => {
+  const { onEditProfile,
+    onAddPlace,
+    onEditAvatar,
+    closeAllPopups,
+    onCardClick,
+    onUpdateUser,
+    onUpdateAvatar,
+    onCardLike,
+    onCardDelete,
+    onUpdateCards,
+    onEscPress,
+    onOverlayClick,
+    isEditProfilePopupOpen,
+    isEditAvatarPopupOpen,
+    isAddPlacePopupOpen,
+    // isImagePopupOpen,
+    selectedCard,
+    cards } = props;
   const currentUser = useContext(CurrentUserContext);
 
   return (
@@ -20,14 +37,14 @@ const Main = (props) => {
             src={currentUser.avatar}
             className="profile__avatar"
             alt={`фото ${currentUser.name}`}
-            onClick={props.onEditAvatar} />
+            onClick={onEditAvatar} />
           <div className="profile__info">
             <div className="profile__title-block">
               <h1 className="profile__name">{currentUser.name}</h1>
               <button
                 className="profile__edit-btn"
                 type="button"
-                onClick={props.onEditProfile}
+                onClick={onEditProfile}
                 aria-label="Редактировать профиль" />
             </div>
             <p className="profile__description">{currentUser.about}</p>
@@ -36,19 +53,19 @@ const Main = (props) => {
         <button
           className="add-btn"
           type="button"
-          onClick={props.onAddPlace}
+          onClick={onAddPlace}
           aria-label="Добавить место" />
       </section>
 
       <section className="cards">
         <ul className="cards__container">
-          {props.cards.map((card) => (
+          {cards.map((card) => (
             <Card
               card={card}
-              onCardClick={props.onCardClick}
+              onCardClick={onCardClick}
               key={card._id}
-              onCardLike={props.onCardLike}
-              onCardDelete={props.onCardDelete} />
+              onCardLike={onCardLike}
+              onCardDelete={onCardDelete} />
           ))}
         </ul>
       </section>
@@ -56,29 +73,37 @@ const Main = (props) => {
       <PopupWithForm
         name='confirmation'
         title='Вы уверены?'
-        onClose={props.closeAllPopups}
+        onClose={closeAllPopups}
         submitBtnText='Да' />
 
 
       <EditAvatarPopup
-        isOpen={props.isEditAvatarPopupOpen}
-        onClose={props.closeAllPopups}
-        onUpdateAvatar={props.onUpdateAvatar} />
+        isOpen={isEditAvatarPopupOpen}
+        onClose={closeAllPopups}
+        onUpdateAvatar={onUpdateAvatar}
+        onEscPress={onEscPress}
+        onOverlayClick={onOverlayClick} />
 
       <EditProfilePopup
-        isOpen={props.isEditProfilePopupOpen}
-        onClose={props.closeAllPopups}
-        onUpdateUser={props.onUpdateUser} />
+        isOpen={isEditProfilePopupOpen}
+        onClose={closeAllPopups}
+        onUpdateUser={onUpdateUser}
+        onEscPress={onEscPress}
+        onOverlayClick={onOverlayClick} />
 
       <ImagePopup
-        card={props.selectedCard}
-        onClose={props.closeAllPopups}
-        isOpen={props.isImagePopupOpen} />
+        card={selectedCard}
+        onClose={closeAllPopups}
+        // isOpen={isImagePopupOpen}
+        onEscPress={onEscPress}
+        onOverlayClick={onOverlayClick} />
 
       <AddPlacePopup
-        isOpen={props.isAddPlacePopupOpen}
-        onClose={props.closeAllPopups}
-        onAddPlace={props.onAddPlace} />
+        isOpen={isAddPlacePopupOpen}
+        onClose={closeAllPopups}
+        onUpdateCards={onUpdateCards}
+        onEscPress={onEscPress}
+        onOverlayClick={onOverlayClick} />
 
 
     </main>

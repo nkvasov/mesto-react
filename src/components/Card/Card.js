@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 const Card = ({card, onCardClick, onCardLike, onCardDelete}) => {
@@ -18,9 +18,7 @@ const Card = ({card, onCardClick, onCardLike, onCardDelete}) => {
   }
 
   const likeClassName = `card__like-btn ${isLiked && 'card__like-btn_enabled'}`;
-
   const TrashClassName = `card__trash-btn ${isOwn && 'card__trash-btn_enabled'}`;
-
 
   return (
     <li className="card">

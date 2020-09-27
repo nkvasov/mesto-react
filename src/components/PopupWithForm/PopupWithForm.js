@@ -7,11 +7,20 @@ const PopupWithForm = (props) => {
     onClose,
     submitBtnText,
     onSubmit,
+    onEscPress,
+    onOverlayClick,
     children } = props;
   const className = `popup popup_content_form ${name}-popup ${isOpen && 'popup_opened'}`;
 
+  React.useEffect(() => {
+    isOpen && document.addEventListener('keydown', onEscPress);
+    return (() => {
+      document.removeEventListener('keydown', onEscPress);
+    });
+  });
+
   return (
-    <section className={className}>
+    <section className={className} onClick={onOverlayClick}>
       <form className="form popup__container" name={name} onSubmit={onSubmit} noValidate>
         <h3 className="form__title"> {title} </h3>
         <button

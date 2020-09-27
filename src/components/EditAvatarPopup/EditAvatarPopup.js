@@ -1,8 +1,8 @@
-import React, { useContext, useState, useEffect, useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import PopupWithForm from '../PopupWithForm/PopupWithForm';
 
-const EditAvatarPopup = ({ isOpen, onClose, onUpdateAvatar }) => {
+const EditAvatarPopup = ({ isOpen, onClose, onUpdateAvatar, onEscPress, onOverlayClick }) => {
   const currentUser = useContext(CurrentUserContext);
   const inputRef = useRef();
   const handleSubmit = (e) => {
@@ -19,7 +19,9 @@ const EditAvatarPopup = ({ isOpen, onClose, onUpdateAvatar }) => {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
-      submitBtnText='Сохранить'>
+      submitBtnText='Сохранить'
+      onEscPress={onEscPress}
+      onOverlayClick={onOverlayClick}>
       <div className="form__field">
         <input
           ref={inputRef}

@@ -1,9 +1,27 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import React, { useState } from 'react';
 import PopupWithForm from '../PopupWithForm/PopupWithForm';
 
-const AddPlacePopup = ({ isOpen, onClose, onUpdateCards }) => {
+const AddPlacePopup = ({ isOpen, onClose, onUpdateCards, onEscPress, onOverlayClick }) => {
+  const [placeName, setPlaceName] = useState('');
+  const [placeUrl, setPlaceUrl] = useState('');
 
+  const handlePlaceNameInputChange = (e) => {
+    setPlaceName(e.target.value);
+  };
+
+  const handlePlaceUrlInputChange = (e) => {
+    setPlaceUrl(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onUpdateCards({
+      name: placeName,
+      link: placeUrl
+    });
+    setPlaceName('');
+    setPlaceUrl('')
+  };
 
   return (
     <PopupWithForm
@@ -12,9 +30,13 @@ const AddPlacePopup = ({ isOpen, onClose, onUpdateCards }) => {
       isOpen={isOpen}
       onClose={onClose}
       submitBtnText='Создать'
-      onSubmit={onUpdateCards} >
+      onSubmit={handleSubmit}
+      onEscPress={onEscPress}
+      onOverlayClick={onOverlayClick} >
       <div className="form__field">
         <input
+          onChange={handlePlaceNameInputChange}
+          value={placeName}
           className="form__input"
           id="card-name"
           type="text"
@@ -26,6 +48,8 @@ const AddPlacePopup = ({ isOpen, onClose, onUpdateCards }) => {
       </div>
       <div className="form__field">
         <input
+          onChange={handlePlaceUrlInputChange}
+          value={placeUrl}
           className="form__input"
           id="card-link"
           type="url"

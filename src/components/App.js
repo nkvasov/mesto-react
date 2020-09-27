@@ -6,12 +6,11 @@ import Main from './Main/Main';
 import { api } from '../utils/Api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-function App(props) {
-
+function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  const [isImagePopupOpen, setImagePopupOpen] = useState(false);
+  // const [isImagePopupOpen, setImagePopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState();
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
@@ -33,6 +32,9 @@ function App(props) {
       .then((newCard) => {
         const newCards = cards.map((c) => c._id === card._id ? newCard : c);
         setCards(newCards);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
 
@@ -44,6 +46,9 @@ function App(props) {
         newCards.splice(deletedCardIndex, 1);
         setCards(newCards);
       })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   const handleEditProfileClick = () => {
@@ -86,27 +91,40 @@ function App(props) {
 
   const handleAddPlaceSubmit = (cardData) => {
     api.postCard(cardData)
-    .then((newCard) => {
-      setCards([newCard, ...cards])
-    })
-    .then(() => {
-      closeAllPopups();
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      .then((newCard) => {
+        setCards([newCard, ...cards])
+      })
+      .then(() => {
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
+
+  const handleEscPress = (e) => {
+    if (e.key === 'Escape') {
+      closeAllPopups();
+    }
+  }
+
+  const handleOverlayClick = (e) => {
+    if (e.currentTarget === e.target) {
+      closeAllPopups();
+    }
+  }
 
   const closeAllPopups = () => {
     isEditProfilePopupOpen && setIsEditProfilePopupOpen(false);
     isEditAvatarPopupOpen && setIsEditAvatarPopupOpen(false);
     isAddPlacePopupOpen && setIsAddPlacePopupOpen(false);
-    isImagePopupOpen && setImagePopupOpen(false);
-    setTimeout(setSelectedCard, 500);
+    // isImagePopupOpen && setImagePopupOpen(false);
+    selectedCard && setSelectedCard();
+    // setTimeout(setSelectedCard, 500);
   }
 
   const handleCardClick = (card) => {
-    setImagePopupOpen(true);
+    // setImagePopupOpen(true);
     setSelectedCard(card);
   }
 
@@ -126,10 +144,12 @@ function App(props) {
             onCardLike={handleCardLike}
             onCardDelete={handleCardDelete}
             onUpdateCards={handleAddPlaceSubmit}
+            onEscPress={handleEscPress}
+            onOverlayClick={handleOverlayClick}
             isEditProfilePopupOpen={isEditProfilePopupOpen}
             isEditAvatarPopupOpen={isEditAvatarPopupOpen}
             isAddPlacePopupOpen={isAddPlacePopupOpen}
-            isImagePopupOpen={isImagePopupOpen}
+            // isImagePopupOpen={isImagePopupOpen}
             selectedCard={selectedCard}
             cards={cards} />
           <Footer />
