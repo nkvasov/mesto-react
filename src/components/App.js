@@ -14,17 +14,37 @@ function App(props) {
   const [isImagePopupOpen, setImagePopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState();
   const [currentUser, setCurrentUser] = useState({});
+  const [cards, setCards] = useState([]);
 
   useEffect(() => {
-    api.getUserInfo()
-      .then((userData) => {
-        console.log(userData);
+    Promise.all([api.getUserInfo(), api.getInitialCards()])
+      .then(([userData, initialCards]) => {
         setCurrentUser(userData);
+        setCards(initialCards);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+
+  function handleCardLike(card) {
+    const isLiked = card.likes.some(user => user._id === currentUser._id);
+    api.changeLikeCardStatus(card._id, isLiked)
+      .then((newCard) => {
+        const newCards = cards.map((c) => c._id === card._id ? newCard : c);
+        setCards(newCards);
+      });
+  }
+
+  function handleCardDelete(card) {
+    api.deleteCard(card._id)
+      .then(() => {
+        const deletedCardIndex = cards.findIndex((c) => c._id === card._id);
+        const newCards = cards.slice();
+        newCards.splice(deletedCardIndex, 1);
+        setCards(newCards);
+      })
+  }
 
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
@@ -53,8 +73,21 @@ function App(props) {
 
   const handleUpdateAvatar = (userData) => {
     api.setAvatar(userData)
-    .then((res) => {
-      setCurrentUser(res);
+      .then((res) => {
+        setCurrentUser(res);
+      })
+      .then(() => {
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleAddPlaceSubmit = (cardData) => {
+    api.postCard(cardData)
+    .then((newCard) => {
+      setCards([newCard, ...cards])
     })
     .then(() => {
       closeAllPopups();
@@ -90,12 +123,15 @@ function App(props) {
             onCardClick={handleCardClick}
             onUpdateUser={handleUpdateUser}
             onUpdateAvatar={handleUpdateAvatar}
+            onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
+            onUpdateCards={handleAddPlaceSubmit}
             isEditProfilePopupOpen={isEditProfilePopupOpen}
             isEditAvatarPopupOpen={isEditAvatarPopupOpen}
             isAddPlacePopupOpen={isAddPlacePopupOpen}
             isImagePopupOpen={isImagePopupOpen}
             selectedCard={selectedCard}
-          />
+            cards={cards} />
           <Footer />
         </div>
       </div>
