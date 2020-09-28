@@ -10,7 +10,6 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  // const [isImagePopupOpen, setImagePopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState();
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
@@ -118,13 +117,10 @@ function App() {
     isEditProfilePopupOpen && setIsEditProfilePopupOpen(false);
     isEditAvatarPopupOpen && setIsEditAvatarPopupOpen(false);
     isAddPlacePopupOpen && setIsAddPlacePopupOpen(false);
-    // isImagePopupOpen && setImagePopupOpen(false);
     selectedCard && setSelectedCard();
-    // setTimeout(setSelectedCard, 500);
   }
 
   const handleCardClick = (card) => {
-    // setImagePopupOpen(true);
     setSelectedCard(card);
   }
 
@@ -149,7 +145,6 @@ function App() {
             isEditProfilePopupOpen={isEditProfilePopupOpen}
             isEditAvatarPopupOpen={isEditAvatarPopupOpen}
             isAddPlacePopupOpen={isAddPlacePopupOpen}
-            // isImagePopupOpen={isImagePopupOpen}
             selectedCard={selectedCard}
             cards={cards} />
           <Footer />

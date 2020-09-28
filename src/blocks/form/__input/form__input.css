@@ -10,9 +10,9 @@
 }
 
 
-/* .form__input:invalid {
+.form__input:invalid {
   border-bottom: 1px solid #FF0000;
-} */
+}
 
 @media screen and (max-width: 525px) {
   .form__input {

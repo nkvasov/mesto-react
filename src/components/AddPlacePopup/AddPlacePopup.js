@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PopupWithForm from '../PopupWithForm/PopupWithForm';
 
 const AddPlacePopup = ({ isOpen, onClose, onUpdateCards, onEscPress, onOverlayClick }) => {
@@ -13,15 +13,24 @@ const AddPlacePopup = ({ isOpen, onClose, onUpdateCards, onEscPress, onOverlayCl
     setPlaceUrl(e.target.value);
   };
 
+  const resetInputs = () => {
+    setPlaceName('');
+    setPlaceUrl('');
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onUpdateCards({
       name: placeName,
       link: placeUrl
     });
-    setPlaceName('');
-    setPlaceUrl('')
+    resetInputs();
   };
+
+  // для возвращения инпутов в исходное состояние при открытии попапа после нажатия esc или клика по оверлею
+  useEffect(() => {
+    isOpen && resetInputs();
+  }, [isOpen]);
 
   return (
     <PopupWithForm

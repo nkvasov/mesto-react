@@ -23,7 +23,6 @@ const Main = (props) => {
     isEditProfilePopupOpen,
     isEditAvatarPopupOpen,
     isAddPlacePopupOpen,
-    // isImagePopupOpen,
     selectedCard,
     cards } = props;
   const currentUser = useContext(CurrentUserContext);
@@ -76,7 +75,6 @@ const Main = (props) => {
         onClose={closeAllPopups}
         submitBtnText='Да' />
 
-
       <EditAvatarPopup
         isOpen={isEditAvatarPopupOpen}
         onClose={closeAllPopups}
@@ -94,7 +92,6 @@ const Main = (props) => {
       <ImagePopup
         card={selectedCard}
         onClose={closeAllPopups}
-        // isOpen={isImagePopupOpen}
         onEscPress={onEscPress}
         onOverlayClick={onOverlayClick} />
 
@@ -104,7 +101,6 @@ const Main = (props) => {
         onUpdateCards={onUpdateCards}
         onEscPress={onEscPress}
         onOverlayClick={onOverlayClick} />
-
 
     </main>
 

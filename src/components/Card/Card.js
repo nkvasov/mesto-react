@@ -5,7 +5,6 @@ const Card = ({card, onCardClick, onCardLike, onCardDelete}) => {
   const currentUser = useContext(CurrentUserContext);
   const isOwn = card.owner._id === currentUser._id;
   const isLiked = card.likes.some(user => user._id === currentUser._id);
-  // const [isLiked, setIsLiked] = useState(wasLiked);
 
   const handleImageClick = () => {
     onCardClick(card);
