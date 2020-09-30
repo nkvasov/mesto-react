@@ -10,10 +10,10 @@
 ## Ссылка на версию проекта без React:
 [mesto](https://nkvasov.github.io/mesto/)
 ## Ссылка на текущую версию проекта на React:
-[Ссылка не работает. Проект собрался в build, но не запускается](https://nkvasov.github.io/mesto-react/index.html)
+[mesto-react](https://nkvasov.github.io/mesto-react/index.html)
 
 ## Технологии
 Используется html, css (включая grid и flexbox), javascript.
 
 ## Планы по доработке:
-1. Полное портирование на React.
+1. небольшие доделки.

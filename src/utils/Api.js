@@ -26,7 +26,7 @@ class Api {
     .then(this._handleOriginalResponse);
   }
 
-  patchUserInfo(inputValues) {
+  setUserInfo(inputValues) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: 'PATCH',
       headers: this._headers,
@@ -35,7 +35,7 @@ class Api {
     .then(this._handleOriginalResponse);
   }
 
-  patchAvatar(inputValues) {
+  setAvatar(inputValues) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: 'PATCH',
       headers: this._headers,
@@ -75,6 +75,14 @@ class Api {
       headers: this._headers
     })
     .then(this._handleOriginalResponse);
+  }
+
+  changeLikeCardStatus = (cardId, isLiked) => {
+    if(isLiked) {
+      return this.unlikeCard(cardId);
+    } else {
+      return this.likeCard(cardId);
+    }
   }
 }
 
