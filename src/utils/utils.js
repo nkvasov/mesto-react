@@ -1,8 +1,4 @@
 import FormValidator from './FormValidator';
-// import {
-//   cardNameInput,
-//   cardLinkInput
-// } from './constants.js';
 
 // Функция включает валидацию для всех форм в документе
 export const enableValidation = function(formSettings) {

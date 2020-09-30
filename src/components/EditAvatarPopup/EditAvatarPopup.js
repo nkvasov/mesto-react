@@ -2,12 +2,17 @@ import React, { useContext, useRef } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import PopupWithForm from '../PopupWithForm/PopupWithForm';
 
-const EditAvatarPopup = ({ isOpen, onClose, onUpdateAvatar, onEscPress, onOverlayClick }) => {
+const EditAvatarPopup = ({
+  isOpen,
+  onClose,
+  onUpdateAvatar,
+  onEscPress
+}) => {
   const currentUser = useContext(CurrentUserContext);
   const inputRef = useRef();
   const handleSubmit = (e) => {
     e.preventDefault();
-    onUpdateAvatar({
+    return onUpdateAvatar({
       avatar: inputRef.current.value,
     });
   };
@@ -19,9 +24,10 @@ const EditAvatarPopup = ({ isOpen, onClose, onUpdateAvatar, onEscPress, onOverla
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
-      submitBtnText='Сохранить'
+      submitBtnLoadingText='Сохранение'
+      submitBtnRegularText='Сохранить'
       onEscPress={onEscPress}
-      onOverlayClick={onOverlayClick}>
+    >
       <div className="form__field">
         <input
           ref={inputRef}
@@ -31,7 +37,8 @@ const EditAvatarPopup = ({ isOpen, onClose, onUpdateAvatar, onEscPress, onOverla
           type="url"
           name="avatar-link"
           placeholder="Ссылка на картинку"
-          required />
+          required
+        />
         <span className="form__input-error form__input-error_origin_avatar-link" />
       </div>
     </PopupWithForm>

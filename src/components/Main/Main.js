@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import PopupWithForm from '../PopupWithForm/PopupWithForm';
 import ImagePopup from '../ImagePopup/ImagePopup.js';
 import Card from '../Card/Card.js';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
@@ -36,7 +35,8 @@ const Main = (props) => {
             src={currentUser.avatar}
             className="profile__avatar"
             alt={`фото ${currentUser.name}`}
-            onClick={onEditAvatar} />
+            onClick={onEditAvatar}
+          />
           <div className="profile__info">
             <div className="profile__title-block">
               <h1 className="profile__name">{currentUser.name}</h1>
@@ -44,7 +44,8 @@ const Main = (props) => {
                 className="profile__edit-btn"
                 type="button"
                 onClick={onEditProfile}
-                aria-label="Редактировать профиль" />
+                aria-label="Редактировать профиль"
+              />
             </div>
             <p className="profile__description">{currentUser.about}</p>
           </div>
@@ -53,7 +54,8 @@ const Main = (props) => {
           className="add-btn"
           type="button"
           onClick={onAddPlace}
-          aria-label="Добавить место" />
+          aria-label="Добавить место"
+        />
       </section>
 
       <section className="cards">
@@ -64,43 +66,48 @@ const Main = (props) => {
               onCardClick={onCardClick}
               key={card._id}
               onCardLike={onCardLike}
-              onCardDelete={onCardDelete} />
+              onCardDelete={onCardDelete}
+            />
           ))}
         </ul>
       </section>
 
-      <PopupWithForm
+      {/* <PopupWithForm
         name='confirmation'
         title='Вы уверены?'
         onClose={closeAllPopups}
-        submitBtnText='Да' />
+        submitBtnText='Да' /> */}
 
       <EditAvatarPopup
         isOpen={isEditAvatarPopupOpen}
         onClose={closeAllPopups}
         onUpdateAvatar={onUpdateAvatar}
         onEscPress={onEscPress}
-        onOverlayClick={onOverlayClick} />
+        onOverlayClick={onOverlayClick}
+      />
 
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}
         onUpdateUser={onUpdateUser}
         onEscPress={onEscPress}
-        onOverlayClick={onOverlayClick} />
+        onOverlayClick={onOverlayClick}
+      />
 
       <ImagePopup
         card={selectedCard}
         onClose={closeAllPopups}
         onEscPress={onEscPress}
-        onOverlayClick={onOverlayClick} />
+        onOverlayClick={onOverlayClick}
+      />
 
       <AddPlacePopup
         isOpen={isAddPlacePopupOpen}
         onClose={closeAllPopups}
         onUpdateCards={onUpdateCards}
         onEscPress={onEscPress}
-        onOverlayClick={onOverlayClick} />
+        onOverlayClick={onOverlayClick}
+      />
 
     </main>
 

@@ -5,12 +5,14 @@ import Footer from './Footer/Footer';
 import Main from './Main/Main';
 import { api } from '../utils/Api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { enableValidation } from '../utils/utils';
+import { mestoFormsSet } from '../utils/mestoFormsSet';
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState();
+  const [selectedCard, setSelectedCard] = useState(null);
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
 
@@ -23,6 +25,11 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
+  }, []);
+
+  // Включаем валидацию
+  useEffect(() => {
+    enableValidation(mestoFormsSet);
   }, []);
 
   function handleCardLike(card) {
@@ -63,41 +70,41 @@ function App() {
   };
 
   const handleUpdateUser = (userData) => {
-    api.setUserInfo(userData)
+    return api.setUserInfo(userData)
       .then((res) => {
         setCurrentUser(res);
       })
-      .then(() => {
-        closeAllPopups();
-      })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        closeAllPopups();
       });
   };
 
   const handleUpdateAvatar = (userData) => {
-    api.setAvatar(userData)
+    return api.setAvatar(userData)
       .then((res) => {
         setCurrentUser(res);
       })
-      .then(() => {
-        closeAllPopups();
-      })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        closeAllPopups();
       });
   };
 
   const handleAddPlaceSubmit = (cardData) => {
-    api.postCard(cardData)
+    return api.postCard(cardData)
       .then((newCard) => {
         setCards([newCard, ...cards])
       })
-      .then(() => {
-        closeAllPopups();
-      })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        closeAllPopups();
       });
   };
 
@@ -107,22 +114,16 @@ function App() {
     }
   }
 
-  const handleOverlayClick = (e) => {
-    if (e.currentTarget === e.target) {
-      closeAllPopups();
-    }
-  }
-
   const closeAllPopups = () => {
     isEditProfilePopupOpen && setIsEditProfilePopupOpen(false);
     isEditAvatarPopupOpen && setIsEditAvatarPopupOpen(false);
     isAddPlacePopupOpen && setIsAddPlacePopupOpen(false);
-    selectedCard && setSelectedCard();
+    selectedCard && setSelectedCard(null);
   }
 
   const handleCardClick = (card) => {
     setSelectedCard(card);
-  }
+  };
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -141,12 +142,12 @@ function App() {
             onCardDelete={handleCardDelete}
             onUpdateCards={handleAddPlaceSubmit}
             onEscPress={handleEscPress}
-            onOverlayClick={handleOverlayClick}
             isEditProfilePopupOpen={isEditProfilePopupOpen}
             isEditAvatarPopupOpen={isEditAvatarPopupOpen}
             isAddPlacePopupOpen={isAddPlacePopupOpen}
             selectedCard={selectedCard}
-            cards={cards} />
+            cards={cards}
+          />
           <Footer />
         </div>
       </div>

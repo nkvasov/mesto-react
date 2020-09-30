@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
-import { enableValidation } from './utils/utils';
-import {mestoFormsSet} from './utils/mestoFormsSet';
+
 
 ReactDOM.render(
   <React.StrictMode>
@@ -13,8 +12,7 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-// Включаем валидацию
-// enableValidation(mestoFormsSet);
+
 
 
 // If you want your app to work offline and load faster, you can change

@@ -7,8 +7,8 @@ export default class FormValidator {
     this._inputErrorSelectorComponent = formSettings.inputErrorSelectorComponent;
     this._formElement = formElement;
     // Ищем в переданном массиве селектор кнопки, открывающей форму (по имени формы)
-    // const openBtnSelector = formSettings.openBtnSelectors.find((item) => item.formName === formElement.name).openBtnSelector;
-    // this._formOpenBtn = document.querySelector(openBtnSelector);
+    const openBtnSelector = formSettings.openBtnSelectors.find((item) => item.formName === formElement.name).openBtnSelector;
+    this._formOpenBtn = document.querySelector(openBtnSelector);
   }
 
   _getErrorElement(inputElement) {
@@ -94,9 +94,9 @@ export default class FormValidator {
 
     // Навешиваем слушатель на кнопку, открывающую форму:
     // он проверяет валидность формы до начала работы с ней (события input)
-    // this._formOpenBtn.addEventListener('click', () => {
-    //   this._checkFormValidity();
-    // });
+    this._formOpenBtn.addEventListener('click', () => {
+      this._checkFormValidity();
+    });
   }
 }
 

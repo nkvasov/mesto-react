@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PopupWithForm from '../PopupWithForm/PopupWithForm';
 
-const AddPlacePopup = ({ isOpen, onClose, onUpdateCards, onEscPress, onOverlayClick }) => {
+const AddPlacePopup = ({
+  isOpen,
+  onClose,
+  onUpdateCards,
+  onEscPress
+}) => {
   const [placeName, setPlaceName] = useState('');
   const [placeUrl, setPlaceUrl] = useState('');
 
@@ -20,11 +25,10 @@ const AddPlacePopup = ({ isOpen, onClose, onUpdateCards, onEscPress, onOverlayCl
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onUpdateCards({
+    return onUpdateCards({
       name: placeName,
       link: placeUrl
     });
-    resetInputs();
   };
 
   // для возвращения инпутов в исходное состояние при открытии попапа после нажатия esc или клика по оверлею
@@ -38,10 +42,11 @@ const AddPlacePopup = ({ isOpen, onClose, onUpdateCards, onEscPress, onOverlayCl
       title='Новое место'
       isOpen={isOpen}
       onClose={onClose}
-      submitBtnText='Создать'
+      submitBtnLoadingText='Сохранение'
+      submitBtnRegularText='Создать'
       onSubmit={handleSubmit}
       onEscPress={onEscPress}
-      onOverlayClick={onOverlayClick} >
+    >
       <div className="form__field">
         <input
           onChange={handlePlaceNameInputChange}
@@ -52,7 +57,8 @@ const AddPlacePopup = ({ isOpen, onClose, onUpdateCards, onEscPress, onOverlayCl
           name="card-name"
           placeholder="Название"
           required minLength="1"
-          maxLength="30" />
+          maxLength="30"
+        />
         <span className="form__input-error form__input-error_origin_card-name" />
       </div>
       <div className="form__field">
@@ -64,7 +70,8 @@ const AddPlacePopup = ({ isOpen, onClose, onUpdateCards, onEscPress, onOverlayCl
           type="url"
           name="card-link"
           placeholder="Ссылка на картинку"
-          required />
+          required
+        />
         <span className="form__input-error form__input-error_origin_card-link" />
       </div>
     </PopupWithForm>
