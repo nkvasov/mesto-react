@@ -24,6 +24,6 @@
 * CSS3 (CSS Flexbox, Grid Layout)
 * JavaScript ES6 (включая асинхронные запросы)
 * React JS:
->> * проект собран на функциональных компонентах с помощью Create React App
->> * используется контекст пользователя
->> * используются хуки useState, useEffect, useContext, useRef
+- проект собран на функциональных компонентах с помощью Create React App
+- используется контекст пользователя
+- используются хуки useState, useEffect, useContext, useRef
